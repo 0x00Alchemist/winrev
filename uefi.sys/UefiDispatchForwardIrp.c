@@ -1,18 +1,17 @@
-__int64 __fastcall UefiDispatchForwardIrp(__int64 Flags, IRP *pIrp) {
-  __int64 IrpFlags; 
-  unsigned int Status; 
+__int64 __fastcall UefiDispatchForwardIrp(_DEVICE_OBJECT *Pdo, IRP *pIrp) {
+  PDEVICE_OBJECT *Extension; 
+  unsigned int Status;
 
-  IrpFlags = *(Flags + 64); //__SKVLLZ: Cannot say what is it really
+  Extension = Pdo->DeviceExtension;
   
-  if ( *IrpFlags == 1 ) {
+  if ( *Extension == 1 ) {
     ++pIrp->CurrentLocation;
     ++pIrp->Tail.Overlay.CurrentStackLocation;
-    
-	return IofCallDriver(*(IrpFlags + 32), pIrp); // __SKVLLZ: first arg is pointer on DEVICE_OBJECT struct. Idk what is it really now..
+	
+    return IofCallDriver(Extension[4], pIrp);
   } else {
     Status = pIrp->IoStatus.Status;
-    
-	IofCompleteRequest(pIrp, 0);
+    IofCompleteRequest(pIrp, 0);
   }
   
   return Status;

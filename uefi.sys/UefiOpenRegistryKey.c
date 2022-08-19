@@ -1,7 +1,7 @@
 NTSTATUS __fastcall UefiOpenRegistryKey(
         void *DirHandle,
         struct _UNICODE_STRING *UefiObjectName,
-        __int64 a3,
+        __int64 AccessMask,
         void **KeyHandle)
 {
   _OBJECT_ATTRIBUTES UefiKeyObjectAttributes;
